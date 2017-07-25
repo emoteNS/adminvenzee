@@ -13,17 +13,30 @@
 </head>
 <body ng-app="app" ng-controller="home as home">
 
-    <h1>Demo</h1>
-
-    <div class="container" ng-show="!home.authenticated">
-        Login with: <a href="/login">Google</a>
-    </div>
-    <div class="container" ng-show="home.authenticated">
-        Logged in as: <span ng-bind="home.user"></span>
-        <div>
-            <button ng-click="home.logout()" class="btn btn-primary">Logout</button>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Venzee Admin</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="!home.authenticated">
+                        <a href="/login">
+                            <span aria-hidden="true">Login with Google</span>
+                        </a>
+                    </li>
+                    <li ng-show="home.authenticated">
+                        <a href="#">
+                            Logged in as: <span ng-bind="home.user"></span>
+                        </a>
+                    </li>
+                    <li ng-show="home.authenticated">
+                        <a href="#" ng-click="home.logout()">Salir</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
 
 <script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
 <script type="text/javascript">
