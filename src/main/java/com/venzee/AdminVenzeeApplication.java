@@ -33,7 +33,8 @@ public class AdminVenzeeApplication extends WebSecurityConfigurerAdapter{
                 .permitAll()
                 .anyRequest()
                 .authenticated()
+                .and().formLogin().loginPage("/")
                 .and().logout().logoutSuccessUrl("/").permitAll()
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                .and().csrf().disable();
     }
 }
