@@ -8,7 +8,8 @@ import java.util.Collection;
 /**
  * Created by enrique on 24/07/17.
  */
-public class UserInfo implements UserDetails{
+public class UserInfo implements UserDetails {
+
     private String name;
     private String email;
     private String profile;

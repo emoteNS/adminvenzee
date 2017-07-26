@@ -1,5 +1,6 @@
 package com.venzee;
 
+import com.venzee.model.IntegrationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -20,6 +21,9 @@ public class AdminVenzeeApplication extends WebSecurityConfigurerAdapter{
     public Principal user(Principal principal) {
         return principal;
     }
+
+    @RequestMapping("/integration")
+    public IntegrationContext context(IntegrationContext context) {return context;}
 
     public static void main(String [] args){
         SpringApplication.run(AdminVenzeeApplication.class, args);
