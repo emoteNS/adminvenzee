@@ -4,7 +4,7 @@ security:
       clientId: 1033577033339-e23g9k2l5easqv4g146org7l19c3co9e.apps.googleusercontent.com
       clientSecret: dNjSvkO9oPKFqe87_EMbDyEN
       accessTokenUri: https://accounts.google.com/o/oauth2/token
-      userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/auth?hd=nearsoft.com
       tokenName: oauth_token
       authenticationScheme: query
       clientAuthenticationScheme: form
