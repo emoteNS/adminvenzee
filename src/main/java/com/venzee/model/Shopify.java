@@ -10,7 +10,7 @@ public class Shopify {
     private int activeIntegrations;
     private int pushesCurrentlyRunning;
     private TotalsRunning totalsRunning;
-    private List<Pushes> pushesRunning;
+    private List<Push> pushesRunning;
 
     public int getActiveIntegrations() {
         return activeIntegrations;
@@ -36,11 +36,11 @@ public class Shopify {
         this.totalsRunning = totalsRunning;
     }
 
-    public List<Pushes> getPushesRunning() {
+    public List<Push> getPushesRunning() {
         return pushesRunning;
     }
 
-    public void setPushesRunning(List<Pushes> pushesRunning) {
+    public void setPushesRunning(List<Push> pushesRunning) {
         this.pushesRunning = pushesRunning;
     }
 }

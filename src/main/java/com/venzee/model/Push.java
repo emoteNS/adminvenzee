@@ -1,21 +1,40 @@
 package com.venzee.model;
 
+import com.venzee.helpers.DateHelper;
+
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * Created by antoniohernandez on 7/26/17.
  */
-public class Pushes {
+public class Push {
+
 
     private String platform;
     private String organizationName;
     private String collectionId;
-    private String integrationContextID;
+    private String integrationContextId;
     private int totalProducts;
     private int processedProducts;
     private LocalDateTime dateCreated;
     private LocalDateTime lastUpdated;
 
+
+
+
+
+    public Push(Map<String, Object> pushMap)  {
+
+        platform = (String) pushMap.get("platform");
+        organizationName = (String) pushMap.get("orgName");
+        collectionId = (String) pushMap.get("collectionId");
+        integrationContextId = (String) pushMap.get("integrationContextId");
+        totalProducts = (int) pushMap.get("totalProducts");
+        processedProducts = (int) pushMap.get("processedProducts");
+        dateCreated = DateHelper.getDate((String) pushMap.get("dateCreated"));
+        lastUpdated = DateHelper.getDate((String) pushMap.get("lastUpdated"));
+    }
 
     public String getPlatform() {
         return platform;
@@ -42,11 +61,11 @@ public class Pushes {
     }
 
     public String getIntegrationContextID() {
-        return integrationContextID;
+        return integrationContextId;
     }
 
-    public void setIntegrationContextID(String integrationContextID) {
-        this.integrationContextID = integrationContextID;
+    public void setIntegrationContextID(String integrationContextId) {
+        this.integrationContextId = integrationContextId;
     }
 
     public int getTotalProducts() {
