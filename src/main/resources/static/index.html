@@ -20,6 +20,11 @@
                     <a class="navbar-brand" href="#">Venzee Admin</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
+                    <li ng-show="home.error">
+                        <a href="#">
+                            <span aria-hidden="true">Error in login</span>
+                        </a>
+                    </li>
                     <li ng-show="!home.authenticated">
                         <a href="/login">
                             <span aria-hidden="true">Login with Google</span>
@@ -40,9 +45,10 @@
 
 <script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
 <script type="text/javascript">
-            angular.module("app", []).controller("home", function($http) {
+            angular.module("app", []).controller("home", function($http, $location) {
                 var self = this;
-                $http.get("/user").success(function(data) {
+
+                $http.get("/user", {headers:{'Accept':'application/json'}}).success(function(data) {
                     self.user = data.userAuthentication.details.name;
                     self.authenticated = true;
                 }).error(function() {
@@ -51,15 +57,20 @@
                 });
 
                 self.logout = function() {
-                  $http.post('/logout', {}).success(function() {
-                    self.authenticated = false;
-                    $location.path("/");
-                  }).error(function(data) {
-                    console.log("Logout failed")
-                    self.authenticated = false;
-                  });
-                };
 
+                    if ($location.absUrl().indexOf("error=true") >= 0) {
+                        self.authenticated = false;
+                        self.error = true;
+                    }
+
+                    $http.post('/logout', {}).success(function() {
+                        self.authenticated = false;
+                        $location.path("/");
+                    }).error(function(data) {
+                        console.log("Logout failed")
+                        self.authenticated = false;
+                    });
+                };
             });
 </script>
 
