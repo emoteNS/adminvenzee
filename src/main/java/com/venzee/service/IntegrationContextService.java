@@ -66,22 +66,24 @@ public class IntegrationContextService {
 
 
 
-    public IntegrationContext getIntegrationContext() throws IOException {
-
+    public IntegrationContext getIntegrationContext() {
+        IntegrationContext context = new IntegrationContext();
         Request request = buildRequestForContext(prodURLString);
-        InputStream response = sendRequest(request);
-        return parseContextResponse(response);
+        try {
+            InputStream response = sendRequest(request);
+            context = parseContextResponse(response);
+        } catch (IOException e ) {
+            System.out.println();
+        }
+        return context;
 
     }
 
     public static void main(String args[]) {
         IntegrationContextService service = new IntegrationContextService();
-        try {
+
             System.out.println(service.getIntegrationContext());
-        } catch (IOException e ) {
 
-
-        }
 
     }
     public IntegrationContext retrieveContext() {return null;}

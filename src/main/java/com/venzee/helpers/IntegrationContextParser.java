@@ -34,6 +34,7 @@ public class IntegrationContextParser {
         List<Push> pushList = pushes
                 .stream()
                 .map(push -> new Push((Map<String, Object>)push))
+                .filter(push -> push.getPlatform() != "shopify")
                 .collect(Collectors.toList());
         shopify.setPushesRunning(pushList);
         shopify.setTotalsRunning(totals);
