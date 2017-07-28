@@ -11,3 +11,7 @@ security:
       scope: https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile
     resource:
       userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+
+venzee:
+  worker:
+    url: http://venzee.nearsoft.com:8090/queues/
