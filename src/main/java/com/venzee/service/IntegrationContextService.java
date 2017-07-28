@@ -39,7 +39,6 @@ public class IntegrationContextService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private Request buildRequestForContext(String urlString) {
@@ -55,16 +54,14 @@ public class IntegrationContextService {
         }
         return _builder.build();
     }
-    public InputStream sendRequest(Request request) throws IOException {
+    private InputStream sendRequest(Request request) throws IOException {
         final Response response = createHttpClient().newCall(request).execute();
         return response.body().byteStream();
     }
 
-    public IntegrationContext parseContextResponse(InputStream response) {
+    private IntegrationContext parseContextResponse(InputStream response) {
         return IntegrationContextParser.parseContext(response);
     }
-
-
 
     public IntegrationContext getIntegrationContext() {
         IntegrationContext context = new IntegrationContext();
@@ -76,15 +73,6 @@ public class IntegrationContextService {
             System.out.println();
         }
         return context;
-
     }
 
-    public static void main(String args[]) {
-        IntegrationContextService service = new IntegrationContextService();
-
-            System.out.println(service.getIntegrationContext());
-
-
-    }
-    public IntegrationContext retrieveContext() {return null;}
 }

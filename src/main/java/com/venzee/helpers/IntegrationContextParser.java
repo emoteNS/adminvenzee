@@ -21,27 +21,43 @@ public class IntegrationContextParser {
     private IntegrationContextParser() {}
 
     public static IntegrationContext parseContext(InputStream response) {
-        IntegrationContext context = new IntegrationContext();
+        IntegrationContext integrationContext = new IntegrationContext();
         Shopify shopify = new Shopify();
-        TotalsRunning totals;
         ReadContext ctx = JsonPath.parse(response);
-        Map<String, Object> activeIntegrations = ctx.read("activeIntegrations");
-        Map<String, Object> pushesCurrentlyRunning = ctx.read("pushesCurrentlyRunning");
-        Map<String, Object> totalsRunningByPlatform = ctx.read("totalsRunningByPlatform");
-        totals = new TotalsRunning((Map<String, Object>) totalsRunningByPlatform.get("shopify"));
+        shopify.setPushesRunning(parseRunningPushes(ctx));
+        shopify.setTotalsRunning(parseTotals(ctx));
+        shopify.setPushesCurrentlyRunning(parsePushesCurrentlyRunning(ctx));
+        shopify.setActiveIntegrations(parseActiveIntegrations(ctx));
+        integrationContext.setShopify(shopify);
+        return  integrationContext;
+    }
 
-        JSONArray pushes = ctx.read("pushesRunning");
-        List<Push> pushList = pushes
+    private static Shopify parseShopify() {
+        Shopify shopify = new Shopify();
+        return shopify;
+    }
+
+    private static List<Push> parseRunningPushes(ReadContext context) {
+        JSONArray pushes = context.read("pushesRunning");
+        return pushes
                 .stream()
                 .map(push -> new Push((Map<String, Object>)push))
                 .filter(push -> push.getPlatform() != "shopify")
                 .collect(Collectors.toList());
-        shopify.setPushesRunning(pushList);
-        shopify.setTotalsRunning(totals);
-        shopify.setPushesCurrentlyRunning((int)pushesCurrentlyRunning.get("shopify"));
-        shopify.setActiveIntegrations((int)activeIntegrations.get("shopify"));
-        context.setShopify(shopify);
-        System.out.println(shopify.getTotalsRunning().getTotalProducts());
-        return  context;
+    }
+
+    private static TotalsRunning parseTotals(ReadContext context) {
+        Map<String, Object> totalsRunningByPlatform = context.read("totalsRunningByPlatform");
+        return new TotalsRunning((Map<String, Object>) totalsRunningByPlatform.get("shopify"));
+    }
+
+    private static int parsePushesCurrentlyRunning(ReadContext context) {
+        Map<String, Object> pushesCurrentlyRunning = context.read("pushesCurrentlyRunning");
+        return (int)pushesCurrentlyRunning.get("shopify");
+    }
+
+    private static int parseActiveIntegrations(ReadContext context) {
+        Map<String, Object> activeIntegrations = context.read("activeIntegrations");
+        return (int)activeIntegrations.get("shopify");
     }
 }
