@@ -13,83 +13,119 @@
 </head>
 <body ng-app="app" ng-controller="home as home">
 
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Venzee Admin</a>
-                </div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li ng-show="!home.authenticated">
-                        <a href="/login">
-                            <span aria-hidden="true">Login with Google</span>
-                        </a>
-                    </li>
-                    <li ng-show="home.authenticated">
-                        <a href="#">
-                            Logged in as: <span ng-bind="home.user"></span>
-                        </a>
-                    </li>
-                    <li ng-show="home.authenticated">
-                        <a href="#" ng-click="home.logout()">Salir</a>
-                    </li>
-                </ul>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Venzee Admin</a>
             </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-show="!home.authenticated">
+                    <a href="/login">
+                        <span aria-hidden="true">Login with Google</span>
+                    </a>
+                </li>
+                <li ng-show="home.authenticated">
+                    <a href="#">
+                        Logged in as: <span ng-bind="home.user"></span>
+                    </a>
+                </li>
+                <li ng-show="home.authenticated">
+                    <a href="#" ng-click="home.logout()">Salir</a>
+                </li>
+            </ul>
         </div>
-    </nav>
-
-    <div ng-show="home.authenticated" class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Shopify</div>
-
-        <!-- Table -->
-        <table class="table">
-            <thead>
-            <tr>
-
-                <th ng-repeat="(key, data) in home.platform">{{key}}</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td ng-repeat="(key, data) in home.platform">{{data}}</td>
-            </tr>
-            </tbody>
-        </table>
     </div>
+</nav>
+
+<div ng-show="home.authenticated" class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Shopify</div>
+
+    <!-- Table -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Active Integrations</th>
+            <th>Pushes Currently Running</th>
+            <th>Totals Running</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <!--<td ng-repeat="(key, data) in home.platform">{{data}}</td>-->
+            <td>{{home.activeIntegrations}}</td>
+            <td>{{home.pushesCurrentlyRunning}}</td>
+            <td>
+                <table>
+                    <tr ng-repeat="(key, data) in home.totalsRunning">
+                        <th>{{key}} : &nbsp;</th>
+                        <td>{{data}}</td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="panel-heading">Pushes</div>
+    
+
+            <!--<td ng-repeat="(key, data) in home.platform">{{data}}</td>-->
+                <div class="row" style="white-space: nowrap; overflow: auto;overflow: scroll">
+                    <div class="col-sm-12" style="display: inline-block">
+                        <div ng-repeat="p in home.pushesRunning" style="display: inline-block">
+                            <div ng-repeat="(key, data) in p">
+                                <label>{{key}} : &nbsp;</label>
+                                <label>{{data}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+</div>
 
 <script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
 <script type="text/javascript">
-            angular.module("app", []).controller("home", function($http) {
-                var self = this;
-                $http.get("/user").success(function(data) {
-                    authentication = data.userAuthentication
-                    self.user = authentication.details.name;
-                    self.authenticated = true;
-                }).error(function() {
-                    self.user = "N/A";
-                    self.authenticated = false;
-                });
 
-                $http.get("/integration").success(function(data) {
-                    self.integration = data;
-                    self.platform = self.integration.shopify;
-                }).error(function() {
+    angular.module("app", []).controller("home", function ($http) {
+        var self = this;
+        $http.get("/user").success(function (data) {
+            authentication = data.userAuthentication
+            self.user = authentication.details.name;
+            self.authenticated = true;
+        }).error(function () {
+            self.user = "N/A";
+            self.authenticated = false;
+        });
 
-                });
+        $http.get("/integration").success(function (data) {
+            self.integration = data;
+            self.platform = self.integration.shopify;
+            self.updatePlatform(self.platform);
+        }).error(function () {
 
-                self.logout = function() {
-                  $http.post('/logout', {}).success(function() {
-                    self.authenticated = false;
-                    $location.path("/");
-                  }).error(function(data) {
-                    console.log("Logout failed")
-                    self.authenticated = false;
-                  });
-                };
+        });
 
+        self.logout = function () {
+            $http.post('/logout', {}).success(function () {
+                self.authenticated = false;
+                $location.path("/");
+            }).error(function (data) {
+                console.log("Logout failed");
+                self.authenticated = false;
             });
+        };
+
+        self.updatePlatform = function (platform) {
+            self.activeIntegrations = self.platform.activeIntegrations;
+            self.pushesCurrentlyRunning = self.platform.pushesCurrentlyRunning;
+            self.totalsRunning = self.platform.totalsRunning;
+            self.pushesRunning = self.platform.pushesRunning;
+        };
+
+    });
 </script>
 
 </body>
