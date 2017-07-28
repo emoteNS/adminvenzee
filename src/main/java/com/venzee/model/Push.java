@@ -1,8 +1,5 @@
 package com.venzee.model;
 
-import com.venzee.helpers.DateHelper;
-
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -17,12 +14,8 @@ public class Push {
     private String integrationContextId;
     private int totalProducts;
     private int processedProducts;
-    private LocalDateTime dateCreated;
-    private LocalDateTime lastUpdated;
-
-
-
-
+    private String dateCreated;
+    private String lastUpdated;
 
     public Push(Map<String, Object> pushMap)  {
 
@@ -32,8 +25,8 @@ public class Push {
         integrationContextId = (String) pushMap.get("integrationContextId");
         totalProducts = (int) pushMap.get("totalProducts");
         processedProducts = (int) pushMap.get("processedProducts");
-        dateCreated = DateHelper.getDate((String) pushMap.get("dateCreated"));
-        lastUpdated = DateHelper.getDate((String) pushMap.get("lastUpdated"));
+        dateCreated = (String) pushMap.get("dateCreated");
+        lastUpdated = (String) pushMap.get("lastUpdated");
     }
 
     public String getPlatform() {
@@ -84,19 +77,20 @@ public class Push {
         this.processedProducts = processedProducts;
     }
 
-    public LocalDateTime getDateCreated() {
+
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDateTime dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public LocalDateTime getLastUpdated() {
+    public String getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(LocalDateTime lastUpdated) {
+    public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 }

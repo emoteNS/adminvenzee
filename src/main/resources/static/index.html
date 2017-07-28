@@ -38,6 +38,27 @@
         </div>
     </nav>
 
+    <div ng-show="home.authenticated" class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Shopify</div>
+
+        <!-- Table -->
+        <table class="table">
+            <thead>
+            <tr>
+
+                <th ng-repeat="(key, data) in home.platform">{{key}}</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td ng-repeat="(key, data) in home.platform">{{data}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 <script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
 <script type="text/javascript">
             angular.module("app", []).controller("home", function($http) {
@@ -49,6 +70,13 @@
                 }).error(function() {
                     self.user = "N/A";
                     self.authenticated = false;
+                });
+
+                $http.get("/integration").success(function(data) {
+                    self.integration = data;
+                    self.platform = self.integration.shopify;
+                }).error(function() {
+
                 });
 
                 self.logout = function() {
