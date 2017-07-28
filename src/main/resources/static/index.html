@@ -70,15 +70,15 @@
     </table>
 
     <div class="panel-heading">Pushes</div>
-    
+
 
             <!--<td ng-repeat="(key, data) in home.platform">{{data}}</td>-->
                 <div class="row" style="white-space: nowrap; overflow: auto;overflow: scroll">
                     <div class="col-sm-12" style="display: inline-block">
-                        <div ng-repeat="p in home.pushesRunning" style="display: inline-block">
+                        <div class="push" ng-repeat="p in home.pushesRunning" style="display: inline-block">
                             <div ng-repeat="(key, data) in p">
                                 <label>{{key}} : &nbsp;</label>
-                                <label>{{data}}</label>
+                                <span>{{data}}</span>
                             </div>
                         </div>
                     </div>
@@ -127,6 +127,17 @@
 
     });
 </script>
+<style>
+    .panel-heading {
+        text-align: center
+    }
+
+    .push {
+        margin-right: 25px;
+    }
+
+
+</style>
 
 </body>
 </html>
