@@ -75,11 +75,24 @@
             <!--<td ng-repeat="(key, data) in home.platform">{{data}}</td>-->
                 <div class="row" style="white-space: nowrap; overflow: auto;overflow: scroll">
                     <div class="col-sm-12" style="display: inline-block">
+                        
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th ng-repeat="(key, data) in home.pushesRunning[0]">{{key}}</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="p in home.pushesRunning">
+                                <!--<td ng-repeat="(key, data) in home.platform">{{data}}</td>-->
+                                <td ng-repeat="(key, data) in p">{{data}}</td>
+
+                            </tr>
+                            </tbody>
+                        </table>
                         <div class="push" ng-repeat="p in home.pushesRunning" style="display: inline-block">
-                            <div ng-repeat="(key, data) in p">
-                                <label>{{key}} : &nbsp;</label>
-                                <span>{{data}}</span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
