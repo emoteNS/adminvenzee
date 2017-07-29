@@ -2,10 +2,8 @@ package com.venzee.helpers;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
-import com.venzee.model.IntegrationContext;
-import com.venzee.model.Push;
-import com.venzee.model.Shopify;
-import com.venzee.model.TotalsRunning;
+import com.venzee.enumerations.PlatformType;
+import com.venzee.model.*;
 import net.minidev.json.JSONArray;
 
 import java.io.InputStream;
@@ -21,43 +19,42 @@ public class IntegrationContextParser {
     private IntegrationContextParser() {}
 
     public static IntegrationContext parseContext(InputStream response) {
-        IntegrationContext integrationContext = new IntegrationContext();
-        Shopify shopify = new Shopify();
-        ReadContext ctx = JsonPath.parse(response);
-        shopify.setPushesRunning(parseRunningPushes(ctx));
-        shopify.setTotalsRunning(parseTotals(ctx));
-        shopify.setPushesCurrentlyRunning(parsePushesCurrentlyRunning(ctx));
-        shopify.setActiveIntegrations(parseActiveIntegrations(ctx));
-        integrationContext.setShopify(shopify);
-        return  integrationContext;
+
+        return new IntegrationContext(getPlatform(response, PlatformType.SHOPIFY));
     }
 
-    private static Shopify parseShopify() {
-        Shopify shopify = new Shopify();
-        return shopify;
-    }
 
-    private static List<Push> parseRunningPushes(ReadContext context) {
+    private static List<Push> parseRunningPushes(ReadContext context, PlatformType type) {
         JSONArray pushes = context.read("pushesRunning");
         return pushes
                 .stream()
                 .map(push -> new Push((Map<String, Object>)push))
-                .filter(push -> push.getPlatform() != "shopify")
+                .filter(push -> push.getPlatform() != type.getJSONTag())
                 .collect(Collectors.toList());
     }
 
-    private static TotalsRunning parseTotals(ReadContext context) {
+    private static TotalsRunning parseTotals(ReadContext context , PlatformType type) {
         Map<String, Object> totalsRunningByPlatform = context.read("totalsRunningByPlatform");
-        return new TotalsRunning((Map<String, Object>) totalsRunningByPlatform.get("shopify"));
+        TotalsRunning totalsRunning = new TotalsRunning((Map<String, Object>) totalsRunningByPlatform.get(type.getJSONTag()));
+        return totalsRunning != null ? totalsRunning : null;
     }
 
-    private static int parsePushesCurrentlyRunning(ReadContext context) {
+    private static int parsePushesCurrentlyRunning(ReadContext context, PlatformType type) {
         Map<String, Object> pushesCurrentlyRunning = context.read("pushesCurrentlyRunning");
-        return (int)pushesCurrentlyRunning.get("shopify");
+        return (int)pushesCurrentlyRunning.get(type.getJSONTag());
     }
 
-    private static int parseActiveIntegrations(ReadContext context) {
+    private static int parseActiveIntegrations(ReadContext context, PlatformType type) {
         Map<String, Object> activeIntegrations = context.read("activeIntegrations");
-        return (int)activeIntegrations.get("shopify");
+        return (int)activeIntegrations.get(type.getJSONTag());
     }
+
+    private static Platform getPlatform(InputStream response, PlatformType type) {
+        ReadContext ctx = JsonPath.parse(response);
+        return new Platform(parseActiveIntegrations(ctx, type),
+                            parsePushesCurrentlyRunning(ctx, type),
+                            parseTotals(ctx, type),
+                            parseRunningPushes(ctx, type));
+    }
+
 }

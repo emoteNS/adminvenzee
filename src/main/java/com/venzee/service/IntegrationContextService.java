@@ -1,22 +1,13 @@
 package com.venzee.service;
 
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.ReadContext;
 import com.venzee.helpers.IntegrationContextParser;
 import com.venzee.model.IntegrationContext;
-import com.venzee.model.Push;
-import com.venzee.model.Shopify;
-import com.venzee.model.TotalsRunning;
-import net.minidev.json.JSONArray;
 import org.springframework.stereotype.Component;
 import okhttp3.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * Created by antoniohernandez on 7/26/17.

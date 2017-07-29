@@ -5,13 +5,33 @@ package com.venzee.model;
  */
 public class IntegrationContext {
 
-    private Shopify shopify;
+    private Platform shopify;
+    private Platform woo;
 
-    public Shopify getShopify() {
+    public IntegrationContext() {}
+
+    public IntegrationContext(Platform shopify, Platform woo) {
+        setShopify(shopify);
+        setWoo(woo);
+    }
+
+    public IntegrationContext(Platform shopify) {
+        this(shopify, null);
+    }
+
+    public Platform getShopify() {
         return shopify;
     }
 
-    public void setShopify(Shopify shopify) {
+    public void setShopify(Platform shopify) {
         this.shopify = shopify;
+    }
+
+    public Platform getWoo() {
+        return woo;
+    }
+
+    public void setWoo(Platform woo) {
+        this.woo = woo;
     }
 }
